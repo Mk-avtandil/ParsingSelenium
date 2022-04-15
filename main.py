@@ -54,6 +54,24 @@
 # Добавьте в дом три вышеупомянутых предмета мебели.
 # При печати дома требуются следующие данные: тип дома, общая площадь, оставшаяся площадь, список названий мебели.
 
+# from random import shuffle
+
+# fornitures = [{'name' : 'bed','area' : 4 },{'name' :'living room' , 'area' : 2},{'name': 'table' , 'area' : 1.5} ]
+# class Home:
+#     def __init__(self, home_type, total_area):
+#         self.home_type = home_type
+#         self.total_area = total_area
+#         self.list_of_fornitures = []
+
+#     def str(self):
+#         occupied_area = sum([x['area'] for x in self.list_of_fornitures])
+#         return f"The home type is {self.home_type}, the total area is {self.total_area}, the free area is {self.total_area-occupied_area}"
+
+# home1 = Home('futuristic',50)
+
+# [home1.list_of_fornitures.append(i) for i in fornitures]
+# print(home1.list_of_fornitures)
+
 # ==================================================================
 
 # # 3 
@@ -139,25 +157,6 @@
 # Должен быть метод «смешивания», который проверяет, что в колоде есть все 52 карты, а затем меняет их случайным образом.
 # Класс должен иметь масть (червы, бубны, трефы, пики) и ценность карты (A, 2,3,4,5,6,7,8,9,10, J, Q, K)
 # ПРИМЕЧАНИЕ: используйте случайное перемешивание
-
-# Copy
-# from random import shuffle
-
-# fornitures = [{'name' : 'bed','area' : 4 },{'name' :'living room' , 'area' : 2},{'name': 'table' , 'area' : 1.5} ]
-# class Home:
-#     def __init__(self, home_type, total_area):
-#         self.home_type = home_type
-#         self.total_area = total_area
-#         self.list_of_fornitures = []
-
-#     def str(self):
-#         occupied_area = sum([x['area'] for x in self.list_of_fornitures])
-#         return f"The home type is {self.home_type}, the total area is {self.total_area}, the free area is {self.total_area-occupied_area}"
-
-# home1 = Home('futuristic',50)
-
-# [home1.list_of_fornitures.append(i) for i in fornitures]
-# print(home1.list_of_fornitures)
 
 # ==================================================================
 
