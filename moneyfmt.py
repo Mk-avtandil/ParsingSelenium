@@ -5,7 +5,6 @@ class MoneyFmt:
     def update(self, new_n):
         self.__n = new_n
 
-    @staticmethod
     def repr(self):
         return float(self.__n)
 

@@ -57,13 +57,14 @@
 # from random import shuffle
 
 # fornitures = [{'name' : 'bed','area' : 4 },{'name' :'living room' , 'area' : 2},{'name': 'table' , 'area' : 1.5} ]
+
 # class Home:
 #     def __init__(self, home_type, total_area):
 #         self.home_type = home_type
 #         self.total_area = total_area
 #         self.list_of_fornitures = []
 
-#     def str(self):
+#     def __str__(self):
 #         occupied_area = sum([x['area'] for x in self.list_of_fornitures])
 #         return f"The home type is {self.home_type}, the total area is {self.total_area}, the free area is {self.total_area-occupied_area}"
 
@@ -87,18 +88,18 @@
 # print(Johnny)
 # <name: Jonathan Rosenberg, age: 24, major: Biology>
 
-# class StudentsRoom:
-#     def __init__(self, name, age, subject):
+# class Student:
+#     def __init__(self, name, age, major):
 #         self.name = name
 #         self.age = age
-#         self.subject = subject
+#         self.major = major
 
 #     def __str__(self):
 #         return str(self.__dict__)
 
-# Steve = StudentsRoom("Steven Schultz", 23, "English")
-# Johnny = StudentsRoom("Jonathan Rosenberg", 24, "Biology")
-# Penny = StudentsRoom("Penelope Meramveliotakis", 21, "Physics")
+# Steve = Student("Steven Schultz", 23, "English")
+# Johnny = Student("Jonathan Rosenberg", 24, "Biology")
+# Penny = Student("Penelope Meramveliotakis", 21, "Physics")
 # print(Steve)
 # print(Johnny)
 
@@ -134,6 +135,7 @@
 
 # def dollarize(n):
 #     return '${:,.2f}'.format(n)
+
 # print(dollarize(-123456.7801))
 
 # import moneyfmt
@@ -144,8 +146,7 @@
 # print(cash)
 # cash.update(-0.3)
 # print(cash)
-# cash = moneyfmt.MoneyFmt.repr(cash)
-# print(cash)
+# print(cash.repr())
 
 # ==================================================================
 
@@ -172,30 +173,41 @@
 
 # Данные отдать в csv
 
-# import requests
-# import urllib3
-# from bs4 import BeautifulSoup 
-# from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium import webdriver
+import time, csv
 
-# URL = 'https://lalafo.kg/kyrgyzstan/nedvizhimost'
-# HEADERS = {
-#     'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:99.0) Gecko/20100101 Firefox/99.0'
-# }
+path_to_driver = '/home/avtandil/Рабочий стол/Team_work4/geckodriver'
+url = 'https://lalafo.kg/kyrgyzstan/nedvizhimost'
 
-# def parser(url):
-#     response = requests.get(url, headers=HEADERS, verify=False)
-#     soup = BeautifulSoup(response.text, 'html.parser')
-#     items = soup.find_all('div div', class_= 'virtual-scroll__container')
-#     tabs = []
-#     print(items)
-#     for item in items:
-#         tabs.append({
-#             'Название' : item.find('p', class_ = 'AdTileHorizontalDescription')
-#             # 'Цена' : item.find('div', class_ = 'price').get_text(strip=True),
-#             # 'Фото' : item.find('img').get('src'),
-#             # 'Адрес' : item.find('span', class_ = 'availability').get_text(strip=True),
-#             # 'Дата' : item.find('span', class_ = 'code').get_text(strip=True),
-#             #'Ссылка' : 
-#         })
-#     print(tabs)
-# parser(URL)
+class Parser:
+    def __init__(self, path_to_driver ,url):
+        self.__driver = webdriver.Firefox(executable_path=path_to_driver)
+        self.__driver.get(url)
+        self.__tabs = []
+        print('Программа собирает данные...')
+        time.sleep(20)
+
+    def write_data(self):
+        self.__items = self.__driver.find_elements(By.CLASS_NAME, "AdTileHorizontal")
+        for item in self.__items:
+            self.__tabs.append({
+                'Название' : item.find_element(By.CLASS_NAME, 'AdTileHorizontalTitle').text,
+                'Цена' : item.find_element(By.CLASS_NAME, 'AdTileHorizontalPrice').text,
+                'Фото' : item.find_element(By.CLASS_NAME, 'AdTileImage').get_attribute("src"),
+                'Адрес' : item.find_element(By.CLASS_NAME, 'city-wrap').text,
+                'Дата' :  item.find_element(By.CLASS_NAME, 'AdTileHorizontalDate').text,
+                'Ссылка' : item.find_element(By.CLASS_NAME, 'AdTileHorizontalImage > a').get_attribute("href")
+            })
+
+        with open('main.csv', 'w') as csv_file:
+            for i in self.__tabs:
+                writer = csv.writer(csv_file)
+                writer.writerow([f"Название: {i['Название']}\n Цена: {i['Цена']}\n Фото: {i['Фото']}\n Адрес: {i['Адрес']}\n Дата: {i['Дата']}\n Ссылка: {i['Ссылка']}\n"])
+        print('Программа завершена!')
+
+
+v1 = Parser(path_to_driver, url)
+v1.write_data()
+
+
