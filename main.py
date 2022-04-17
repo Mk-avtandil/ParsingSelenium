@@ -159,6 +159,42 @@
 # Класс должен иметь масть (червы, бубны, трефы, пики) и ценность карты (A, 2,3,4,5,6,7,8,9,10, J, Q, K)
 # ПРИМЕЧАНИЕ: используйте случайное перемешивание
 
+# class DeckOfCards():
+#     deck = [None] * 36
+#     def __init__(self):
+#         x = 0
+#         for i in range(1, 4 + 1):
+#             for j in range(6, 14 + 1):
+#                 self.deck[x] = Card(i, j)
+#                 x += 1
+#     def get(self, i):
+#         try:
+#             answer = {
+#                 11: "Валет",
+#                 12: "Дама",
+#                 13: "Король",
+#                 14: "Туз",
+#             }[self.deck[i].Num]
+#         except:
+#             answer = str(self.deck[i].Num)
+#         answer += " "
+#         answer += {
+#             1: "червей",
+#             2: "бубей",
+#             3: "крестей",
+#             4: "пик",
+#         }[self.deck[i].Mastb]
+#         return answer
+# class Card():
+#     def __init__(self, i, j):
+#         self.Mastb = i
+#         self.Num   = j
+ 
+# if __name__ == '__main__':
+#     deck = DeckOfCards()
+#     for i in range(36):
+#         print(deck.get(i))
+
 # ==================================================================
 
 # # 6 
@@ -173,41 +209,59 @@
 
 # Данные отдать в csv
 
-from selenium.webdriver.common.by import By
-from selenium import webdriver
-import time, csv
-
-path_to_driver = '/home/avtandil/Рабочий стол/Team_work4/geckodriver'
-url = 'https://lalafo.kg/kyrgyzstan/nedvizhimost'
-
-class Parser:
-    def __init__(self, path_to_driver ,url):
-        self.__driver = webdriver.Firefox(executable_path=path_to_driver)
-        self.__driver.get(url)
-        self.__tabs = []
-        print('Программа собирает данные...')
-        time.sleep(20)
-
-    def write_data(self):
-        self.__items = self.__driver.find_elements(By.CLASS_NAME, "AdTileHorizontal")
-        for item in self.__items:
-            self.__tabs.append({
-                'Название' : item.find_element(By.CLASS_NAME, 'AdTileHorizontalTitle').text,
-                'Цена' : item.find_element(By.CLASS_NAME, 'AdTileHorizontalPrice').text,
-                'Фото' : item.find_element(By.CLASS_NAME, 'AdTileImage').get_attribute("src"),
-                'Адрес' : item.find_element(By.CLASS_NAME, 'city-wrap').text,
-                'Дата' :  item.find_element(By.CLASS_NAME, 'AdTileHorizontalDate').text,
-                'Ссылка' : item.find_element(By.CLASS_NAME, 'AdTileHorizontalImage > a').get_attribute("href")
-            })
-
-        with open('main.csv', 'w') as csv_file:
-            for i in self.__tabs:
-                writer = csv.writer(csv_file)
-                writer.writerow([f"Название: {i['Название']}\n Цена: {i['Цена']}\n Фото: {i['Фото']}\n Адрес: {i['Адрес']}\n Дата: {i['Дата']}\n Ссылка: {i['Ссылка']}\n"])
-        print('Программа завершена!')
+# from bs4 import BeautifulSoup
+# from selenium import webdriver
+# import time, csv
+# from selenium.webdriver.common.by import By
 
 
-v1 = Parser(path_to_driver, url)
-v1.write_data()
+# path_to_driver = '/home/avtandil/Рабочий стол/Team_work4/geckodriver'
+# url = 'https://lalafo.kg/kyrgyzstan/nedvizhimost'
+
+# class Parser:
+#     def __init__(self, path_to_driver, url):
+#         self.__driver = webdriver.Firefox(executable_path=path_to_driver)
+#         self.__driver.get(url)
+#         self.__tabs = []
+#         print('Подождите, идёт загрузка страницы...')
+#         time.sleep(3)
+
+
+#     def write_data(self):
+#         self.__items = None
+#         self.__btn = self.__driver.find_elements(By.CLASS_NAME, 'paginator-item')
+#         for i in range(1, len(self.__btn)):
+#             self.__driver.execute_script("window.scrollTo(600, window.scrollY + 1000)")
+#             soup = BeautifulSoup(self.__driver.page_source, 'html.parser')
+#             self.__items = soup.find_all('div', 'AdTileHorizontal')
+
+#             for item in self.__items:
+#                 type_of_aprt = item.find('p', 'AdTileHorizontalDescription').text
+#                 if 'Посуточная аренда' in type_of_aprt:
+#                     self.__tabs.append({
+#                         'Название' : item.find('a', 'AdTileHorizontalTitle').get_text(strip=True),
+#                         'Цена' : item.find('p', 'AdTileHorizontalPrice').get_text(strip=True),
+#                         'Фото' : item.find('img').get('src'),
+#                         'Адрес' : item.find('p', 'city-wrap').text,
+#                         'Дата' :  item.find('span', 'AdTileHorizontalDate').text,
+#                         'Ссылка' : 'https://lalafo.kg' + item.find('a', 'AdTileHorizontalTitle').get('href')
+#                     })
+                    
+#             self.__btn[i].click()
+
+
+#         if self.__tabs:
+#             with open('main.csv', 'w') as csv_file:
+#                 for i in self.__tabs:
+#                     writer = csv.writer(csv_file)
+#                     writer.writerow([f"Название: {i['Название']}\n Цена: {i['Цена']}\n Фото: {i['Фото']}\n Адрес: {i['Адрес']}\n Дата: {i['Дата']}\n Ссылка: {i['Ссылка']}\n"])
+#         else:
+#             print('Парсер не успел спарсить данные по условию попробуйте еще раз!')
+#         print('Программа завершена!')
+#         self.__driver.close()
+
+
+# v1 = Parser(path_to_driver, url)
+# v1.write_data()
 
 
